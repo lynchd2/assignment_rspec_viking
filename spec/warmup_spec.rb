@@ -24,7 +24,9 @@ let(:shouter) { Warmup.new }
   describe "#call_methods(string)" do
     it "calls upcase on string parameter" do
       string = "string"
-      expect(:shouter).to recieve()
+      #expect(shouter).to recieve(:upcase!).with(string).and_return("STRING")
+      allow(string).to recieve(:upcase!).and_return("STRING")
+    end
   end
 
 end
