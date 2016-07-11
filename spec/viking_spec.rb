@@ -80,11 +80,39 @@ RSpec.describe Viking do
 
   describe "#attack" do 
 
-    it "will cause the recipients health to drop when attacking another viking" do 
-      
+    it "will cause the recipients health to drop when attacking another viking" do
+      health = enemy.health 
+      v.attack(enemy)
+      expect(health).not_to eq(enemy.health)
+    end
+
+    it "will call the #take_damage method on the enemy viking" do
+      expect(enemy).to receive(:take_damage)
       v.attack(enemy)
     end
 
+    it "attacks with fists if the viking has no weapons" do
+      expect(v).to receive(:damage_with_fists).and_return(5)
+      v.attack(enemy)
+    end
+
+    it "attacking with firsts returns the value of the stength times multiplyer" do
+      health = enemy.health
+      v.attack(enemy)
+      new_health = enemy.health
+      expect(new_health).to eq(health - (0.25 * 10))
+    end
+
+    it "when a viking has a weapon, returns damage with weapon" do
+      weapon = double("Weapon", name: "Laser Gun", is_a?: Weapon)
+      v.pick_up_weapon(weapon)
+      expect(v).to receive(:damage_with_weapon).and_return(5)
+      v.attack(enemy)
+    end
+
+    it "attacking with weapon deals damage" do
+      
+    end
   end
 
 end
