@@ -110,9 +110,33 @@ RSpec.describe Viking do
       v.attack(enemy)
     end
 
-    it "attacking with weapon deals damage" do
+    it "attacking with weapon deals damage equivalent to the viking's strength * the weapon's mulitplier" do
+      weapon = double("Weapon", name: "Laser Gun", is_a?: Weapon, multiplier: 1)
+      v.pick_up_weapon(weapon)
+      expect(v.weapon.multiplier * v.strength).to eq(10)
+      
       
     end
+    
+    specify "attacking using a bow without enough arrows uses Fists instead" do 
+      bow = double("Bow", arrows: 0, name: "bow", is_a?: Weapon)
+      v.pick_up_weapon(bow)
+      expect(v).to receive(:damage_with_fists).and_return(5)
+      v.attack(enemy)
+    end
+
+
+  end
+
+
+  describe "#check_death" do 
+    
+    specify "killing a viking should raise an error" do 
+      
+      expect(v).to receive(:check_death)
+      v.receive_attack(200)
+    end
+
   end
 
 end
